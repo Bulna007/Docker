@@ -1,9 +1,10 @@
 # A simple JAVA Web application 
 
+`TODO- Steps to run the app without docker`
 
 ### Verify the client is running
 
-Open your browser and type `http://localhost:5173`
+Open your browser and type `http://localhost:8080`
 
 # Using Docker
 
