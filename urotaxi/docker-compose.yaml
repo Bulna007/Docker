@@ -1,0 +1,34 @@
+version: '1.0'
+networks:
+  urotaxintw:
+    driver: bridge
+volumes:
+  urotaxidbvol:
+services:
+  mysql-db:
+    image: mysql:9.4.0
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: welcome1
+    networks:
+      - urotaxintw
+    volumes:
+      - urotaxidbvol:/var/lib/mysql
+      - ./src/main/db/urotaxidb.sql:/docker-entrypoint-initdb.d/urotaxidb.sql
+  urotaxi:
+    image: urotaxi:1.0
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql-db:3306/urotaxidb
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: welcome1
+    networks:
+      - urotaxintw
+    ports:
+      - "8082:8080"
+    healthcheck:
+      test: ["CMD", "curl", "-f", " http://localhost:8080/urotaxi/actuator/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+    depends_on:
+      - mysql-db
